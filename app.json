@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "ListShop",
-    "slug": "ListShop",
+    "slug": "listshop",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f5ef04a8-88c8-4f6a-aa44-402a85a63084"
+      }
+    },
+    "owner": "ruideredgar"
   }
 }
