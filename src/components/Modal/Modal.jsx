@@ -6,7 +6,6 @@ export const CustomModal = ({ visible, onClose, handleAddItem, addCategory, cate
 	const [inputValue, setInputValue] = useState('');
 
 	const onSubmit = () => {
-		// console.log(category, handleAddItem)
 		handleAddItem
 		? handleAddItem(category, inputValue)
 		:	addCategory(inputValue);
@@ -27,7 +26,9 @@ export const CustomModal = ({ visible, onClose, handleAddItem, addCategory, cate
 					style={ModalStyles.input}
 					placeholder="Enter an item"
 					value={inputValue}
-					onChangeText={setInputValue}
+					onChangeText={text => {
+						setInputValue(text);
+					}}
 				/>
 				<View style={ModalStyles.buttonContainer}>
 					<Button title="Cancel" onPress={onClose} color="#FF7F7F" />

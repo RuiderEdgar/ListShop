@@ -5,11 +5,12 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { setupDataBase } from './bootstrap/setupDatabase.bootstrap';
 import { Header } from './components/Header/Header';
 import { CategoryHeader } from './components/CategoryHeader/CategoryHeader';
-import { fakeData } from './fakeData/fakeData';
+import { categoryService } from './shared/globals/services/db/category.service';
+import { itemService } from './shared/globals/services/db/item.service';
 
 export default function App() {
-	const [data, setData] = useState([])
 	const [categories, setCategories] = useState([])
+	const [change, setChange] = useState(false)
 
 	//implementacion database
 	useEffect(() => {
@@ -17,71 +18,61 @@ export default function App() {
 		setupDataBase();
 	}, [])
 
+	useEffect(() => {
+		// Obtener las categorías iniciales al cargar la aplicación
+		categoryService.getAllCategories(categories => {
+			setCategories(categories);
+		});
+	}, []);
+
+	useEffect(() => {
+		// Configurar el watcher para actualizar las categorías cuando haya cambios en la base de datos
+		categoryService.watchCategories(categories => {
+			setCategories(categories);
+		});
+	}, [change])
+
+
+	//todo
+	// categoryService.getAllCategories(categories => {
+	// 	console.log('Categorías:', categories);
+	// });
+	// console.log("categories: ", categories)
 
 	const addCategory = (inputCategory) => {
-		const newCategory = {category: inputCategory};
-		setCategories([...categories, newCategory])
+		categoryService.insertCategory(inputCategory)
+		setChange(!change)
 	}
 
-	const deleteCategory = (inputCategory) => {
-		//todo Arreglar esta wea, integrando la base de datos
-		const updateCategories = categories.filter(category => category.category !== inputCategory)
-		setData(updateCategories)
-	}
+	const deleteCategory = categoryId => {
+		categoryService.deleteCategory(categoryId);
+		setChange(!change);
+	};
 
 	const handleAddItem = (category, newItem) => {
-		// Buscar la categoría correspondiente en fakeData
-		const updatedData = data.map(categoryObj => {
-			if (categoryObj.category === category) {
-				// Agregar el nuevo item a la lista de items de la categoría
-				categoryObj.items.push(newItem);
-			}
-			return categoryObj;
-		});
-
-		// Actualizar el estado con los datos actualizados
-		setData(updatedData);
+		itemService.insertItem(category, newItem);
 	};
 
 	const handleDeleteItem = (category, deleteItem) => {
-		const updatedData = data.map(categoryIndex => {
-			if (categoryIndex.category === category) {
-				const items = categoryIndex.items.filter(item => item !== deleteItem);
-				return { ...categoryIndex, items: items };
-			}
-			return categoryIndex;
-		});
-		setData(updatedData);
+		itemService.deleteItem(category, deleteItem);
 	};
 
-	useEffect(() => {
-		setData(fakeData)
-	}, [fakeData])
-
-	useEffect(() => {
-		// Combina la información de categories y fakeData
-		const updatedData = [...categories, ...fakeData];
-		setData(updatedData);
-	}, [categories]);
-
-
-
 	const showCategories = () => {
-		return (
-			data.map(category => {
-				return (
-					<CategoryHeader
-						category={category.category}
-						items={category.items}
-						key={category.category}
-						handleAddItem={handleAddItem}
-						handleDeleteItem={handleDeleteItem}
-						deleteCategory={deleteCategory}
-					/>
-				);
-			})
-		)
-	}
+		return categories.map(categoryI => {
+			return (
+				<CategoryHeader
+					id={categoryI.id} // Pasar el ID como prop
+					category={categoryI.name}
+					key={categoryI.name} // Usar el ID como clave única
+					handleAddItem={handleAddItem}
+					handleDeleteItem={handleDeleteItem}
+					deleteCategory={deleteCategory}
+				/>
+			);
+		});
+	};
+
+
 
   return (
 		<SafeAreaProvider>
@@ -89,7 +80,7 @@ export default function App() {
 				<StatusBar style="dark" />
 				<ScrollView>
 					<Header addCategory={addCategory}/>
-					{data && showCategories()}
+					{categories && showCategories()}
 				</ScrollView>
 			</SafeAreaView>
 		</SafeAreaProvider>

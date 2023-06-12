@@ -21,27 +21,77 @@ class CategoryService {
 	}
 
 	insertCategory(inputCategory) {
-		db.transaction(tx => {
-			tx.executeSql(
-				'INSERT INTO category (idCategory) VALUES (?)',
-				[inputCategory],
-				() => {
-					console.log('Categoría insertada con éxito en la tabla "category"');
-				},
-				(_, error) => {
-					console.log('Error al insertar la categoría en la tabla "category":', error);
-				}
-			);
-		});
+		try {
+			db.transaction(tx => {
+				tx.executeSql(
+					'INSERT INTO category (nameCategory) VALUES (?)',
+					[inputCategory],
+					() => {
+						console.log('Categoría insertada con éxito en la tabla "category"');
+					},
+					(_, error) => {
+						console.log('Error al insertar la categoría en la tabla "category":', error);
+					}
+				);
+			});
+		} catch (error) {
+			console.log('Error en insertCategory:', error);
+		}
 	}
+
+	watchCategories = callback => {
+		db.transaction(
+			tx => {
+				tx.executeSql(
+					'SELECT * FROM category',
+					[],
+					(_, { rows }) => {
+						const categories = rows._array.map(row => ({
+							id: row.idCategory,
+							name: row.nameCategory
+						}));
+						callback(categories);
+					},
+					(_, error) => {
+						console.log('Error al obtener las categorías:', error);
+						callback([]);
+					}
+				);
+			},
+			null,
+			() => {
+				// Se ejecuta cuando hay cambios en la base de datos
+				db.transaction(tx => {
+					tx.executeSql(
+						'SELECT * FROM category',
+						[],
+						(_, { rows }) => {
+							const categories = rows._array.map(row => ({
+								id: row.idCategory,
+								name: row.nameCategory
+							}));
+							callback(categories);
+						},
+						(_, error) => {
+							console.log('Error al obtener las categorías:', error);
+							callback([]);
+						}
+					);
+				});
+			}
+		);
+	};
 
 	getAllCategories(callback) {
 		db.transaction(tx => {
 			tx.executeSql(
-				'SELECT * FROM category',
+				'SELECT idCategory, nameCategory FROM category',
 				[],
 				(_, { rows }) => {
-					const categories = rows._array.map(row => row.nameCategory);
+					const categories = rows._array.map(row => ({
+						id: row.idCategory,
+						name: row.nameCategory
+					}));
 					callback(categories);
 				},
 				(_, error) => {
@@ -55,7 +105,7 @@ class CategoryService {
 	deleteCategory(categoryId) {
 		db.transaction(tx => {
 			tx.executeSql(
-				'DELETE FROM category WHERE id = ?',
+				'DELETE FROM category WHERE idCategory = ?',
 				[categoryId],
 				() => {
 					console.log('Categoría eliminada con éxito de la tabla "categories"');

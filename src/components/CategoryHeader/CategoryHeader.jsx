@@ -7,14 +7,14 @@ import add from '../../assets/icons/add.png'
 import trash from '../../assets/icons/basura.png'
 import { TitleCategory } from './CategoryHeader.module'
 
-export const CategoryHeader = ({ category, items, handleAddItem, handleDeleteItem, deleteCategory }) => {
+export const CategoryHeader = ({ id, category, items, handleAddItem, handleDeleteItem, deleteCategory }) => {
 	const [isModalVisible, setModalVisible] = useState(false);
-console.log(category)
+// console.log(category)
 	const toggleModal = () => {
 		setModalVisible(!isModalVisible);
 	};
 	const removeCategory = () => {
-		deleteCategory(category);
+		deleteCategory(id);
 	};
 
 	const showItems = () => {
