@@ -8,7 +8,7 @@ export const TitleCategory = StyleSheet.create({
 		justifyContent: 'center',
 		width: '100%',
 		minHeight: '20',
-		paddingBottom: 5,
+		paddingBottom: 5
 	},
 	text: {
 		color: 'white',
@@ -30,16 +30,22 @@ export const TitleCategory = StyleSheet.create({
 		paddingLeft: 6
 	},
 	rowContainer: {
-  flexDirection: 'row',
-  alignItems: 'center',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between'
 	},
 	image: {
-		width: 18,
-		height: 18
+		width: 19,
+		height: 19
 	},
-	button: {
-		flex: 1,
-    alignItems: 'flex-end',
+	textContainer: {
+		flex: 1
+	},
+	buttonsContainer: {
+		flexDirection: 'row',
 		paddingRight: 6
+	},
+	buttonTrash: {
+		paddingRight: 8
 	}
 });

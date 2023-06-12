@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { setupDataBase } from './bootstrap/setupDatabase.bootstrap';
 import { Header } from './components/Header/Header';
 import { CategoryHeader } from './components/CategoryHeader/CategoryHeader';
 import { fakeData } from './fakeData/fakeData';
@@ -10,12 +11,20 @@ export default function App() {
 	const [data, setData] = useState([])
 	const [categories, setCategories] = useState([])
 
+	//implementacion database
+	useEffect(() => {
+		//create tables
+		setupDataBase();
+	}, [])
+
+
 	const addCategory = (inputCategory) => {
 		const newCategory = {category: inputCategory};
 		setCategories([...categories, newCategory])
 	}
 
 	const deleteCategory = (inputCategory) => {
+		//todo Arreglar esta wea, integrando la base de datos
 		const updateCategories = categories.filter(category => category.category !== inputCategory)
 		setData(updateCategories)
 	}
@@ -49,9 +58,12 @@ export default function App() {
 		setData(fakeData)
 	}, [fakeData])
 
-// console.log('Datos: ', data)
-// const updatedData = data.filter(ci => ci.category !== 'Frutas');
-// console.log('Update Datos: ', updatedData);
+	useEffect(() => {
+		// Combina la información de categories y fakeData
+		const updatedData = [...categories, ...fakeData];
+		setData(updatedData);
+	}, [categories]);
+
 
 
 	const showCategories = () => {
@@ -64,6 +76,7 @@ export default function App() {
 						key={category.category}
 						handleAddItem={handleAddItem}
 						handleDeleteItem={handleDeleteItem}
+						deleteCategory={deleteCategory}
 					/>
 				);
 			})
@@ -74,8 +87,10 @@ export default function App() {
 		<SafeAreaProvider>
 			<SafeAreaView style={styles.container}>
 				<StatusBar style="dark" />
-				<Header/>
-				{data && showCategories()}
+				<ScrollView>
+					<Header addCategory={addCategory}/>
+					{data && showCategories()}
+				</ScrollView>
 			</SafeAreaView>
 		</SafeAreaProvider>
 	);
