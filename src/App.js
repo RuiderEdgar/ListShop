@@ -55,10 +55,21 @@ export default function App() {
 		setChange(!change);
 	};
 
-	const deleteCategory = categoryId => {
-		categoryService.deleteCategory(categoryId);
-		setChange(!change);
+	// const deleteCategory = categoryId => {
+	// 	categoryService.deleteCategory(categoryId);
+	// 	setChange(!change);
+	// };
+
+	const deleteCategory = async categoryId => {
+		try {
+			await categoryService.deleteItemsByCategoryId(categoryId);
+			await categoryService.deleteCategory(categoryId);
+			setChange(!change);
+		} catch (error) {
+			console.log('Error al eliminar la categoría y los items relacionados:', error);
+		}
 	};
+
 
 	//*Items
 	const handleAddItem = (category, newItem) => {
