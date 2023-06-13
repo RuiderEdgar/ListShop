@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-
 export const TitleCategory = StyleSheet.create({
 	container: {
 		backgroundColor: '#F5F5F5',

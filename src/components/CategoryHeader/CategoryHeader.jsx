@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
-import { View, Text, Image, Pressable } from 'react-native'
+import React, { useState } from 'react';
+import { View, Text, Image, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ListItem } from '../ListItems/ListItems'
-import {CustomModal} from '../Modal/Modal';
-import add from '../../assets/icons/add.png'
-import trash from '../../assets/icons/basura.png'
-import { TitleCategory } from './CategoryHeader.module'
+import { ListItem } from '../ListItems/ListItems';
+import { CustomModal } from '../Modal/Modal';
+import add from '../../assets/icons/add.png';
+import trash from '../../assets/icons/basura.png';
+import { TitleCategory } from './CategoryHeader.module';
 
 export const CategoryHeader = ({ id, category, items, handleAddItem, handleDeleteItem, deleteCategory }) => {
 	const [isModalVisible, setModalVisible] = useState(false);
-// console.log(category)
+	// console.log(category)
 	const toggleModal = () => {
 		setModalVisible(!isModalVisible);
 	};
@@ -21,7 +21,7 @@ export const CategoryHeader = ({ id, category, items, handleAddItem, handleDelet
 		const filteredItems = items.filter(item => item.idCategory1 === id);
 
 		return filteredItems.map(item => (
-			<ListItem item={item.item} key={item.id} handleDeleteItem={handleDeleteItem} itemId={item.id}/>
+			<ListItem item={item.item} key={item.id} handleDeleteItem={handleDeleteItem} itemId={item.id} />
 		));
 	};
 

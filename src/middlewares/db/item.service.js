@@ -103,24 +103,23 @@ class ItemService {
 	}
 
 	deleteItem(itemId) {
-  db.transaction(tx => {
-    tx.executeSql(
-      'DELETE FROM items WHERE id = ?',
-      [itemId],
-      (_, { rowsAffected }) => {
-        if (rowsAffected > 0) {
-          console.log('Item eliminado correctamente');
-        } else {
-          console.log('No se encontró ningún item con el ID especificado');
-        }
-      },
-      error => {
-        console.log('Error al eliminar el item:', error);
-      }
-    );
-  });
-}
-
+		db.transaction(tx => {
+			tx.executeSql(
+				'DELETE FROM items WHERE id = ?',
+				[itemId],
+				(_, { rowsAffected }) => {
+					if (rowsAffected > 0) {
+						console.log('Item eliminado correctamente');
+					} else {
+						console.log('No se encontró ningún item con el ID especificado');
+					}
+				},
+				error => {
+					console.log('Error al eliminar el item:', error);
+				}
+			);
+		});
+	}
 }
 
 export const itemService = new ItemService();

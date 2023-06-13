@@ -118,24 +118,23 @@ class CategoryService {
 	}
 
 	deleteItemsByCategoryId = categoryId => {
-  return new Promise((resolve, reject) => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'DELETE FROM items WHERE idCategory1 = ?',
-        [categoryId],
-        () => {
-          console.log('Items eliminados correctamente');
-          resolve();
-        },
-        error => {
-          console.log('Error al eliminar los items:', error);
-          reject(error);
-        }
-      );
-    });
-  });
-};
-
+		return new Promise((resolve, reject) => {
+			db.transaction(tx => {
+				tx.executeSql(
+					'DELETE FROM items WHERE idCategory1 = ?',
+					[categoryId],
+					() => {
+						console.log('Items eliminados correctamente');
+						resolve();
+					},
+					error => {
+						console.log('Error al eliminar los items:', error);
+						reject(error);
+					}
+				);
+			});
+		});
+	};
 }
 
 export const categoryService = new CategoryService();

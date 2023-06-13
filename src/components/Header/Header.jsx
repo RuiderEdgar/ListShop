@@ -1,31 +1,26 @@
-import React, {useState} from 'react'
-import { View, Text, Image, Pressable } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { CustomModal } from '../Modal/Modal';
 import { Logo } from './Header.module';
-import add from '../../assets/icons/add.png';
 
-export const Header = ({addCategory}) => {
+export const Header = ({ addCategory }) => {
 	const [isModalVisible, setModalVisible] = useState(false);
 
 	const toggleModal = () => {
 		setModalVisible(!isModalVisible);
 	};
 
-  return (
+	return (
 		<View style={Logo.container}>
 			<View style={Logo.buttonContainer}>
 				<Pressable onPress={toggleModal}>
-					<Image style={Logo.image} source={add} />
+					<Ionicons name="add-circle-outline" size={30} color="white" />
 				</Pressable>
 			</View>
 			<Text style={Logo.text}>ListShop</Text>
 
-			<CustomModal
-				visible={isModalVisible}
-				onClose={toggleModal}
-				key={'item'}
-				addCategory={addCategory}
-			/>
+			<CustomModal visible={isModalVisible} onClose={toggleModal} key={'item'} addCategory={addCategory} />
 		</View>
 	);
-}
+};

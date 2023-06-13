@@ -6,10 +6,8 @@ export const CustomModal = ({ visible, onClose, handleAddItem, addCategory, cate
 	const [inputValue, setInputValue] = useState('');
 
 	const onSubmit = () => {
-		handleAddItem
-		? handleAddItem(categoryId, inputValue)
-		:	addCategory(inputValue);
-	}
+		handleAddItem ? handleAddItem(categoryId, inputValue) : addCategory(inputValue);
+	};
 
 	const handleModalSubmit = () => {
 		if (inputValue.trim() !== '') {
