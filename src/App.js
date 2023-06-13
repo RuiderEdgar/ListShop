@@ -7,6 +7,7 @@ import { Header } from './components/Header/Header';
 import { CategoryHeader } from './components/CategoryHeader/CategoryHeader';
 import { categoryService } from './shared/globals/services/db/category.service';
 import { itemService } from './shared/globals/services/db/item.service';
+import { validationsMiddleware } from './shared/globals/helpers/middlewares/validation-middleware';
 
 export default function App() {
 	const [categories, setCategories] = useState([]);
@@ -55,11 +56,6 @@ export default function App() {
 		setChange(!change);
 	};
 
-	// const deleteCategory = categoryId => {
-	// 	categoryService.deleteCategory(categoryId);
-	// 	setChange(!change);
-	// };
-
 	const deleteCategory = async categoryId => {
 		try {
 			await categoryService.deleteItemsByCategoryId(categoryId);
@@ -81,8 +77,6 @@ export default function App() {
 		itemService.deleteItem(idItem);
 		setChange(!change);
 	};
-
-	// borre: items = { items };, para visualizarlo con la llave foranea y pasarla como prop a category
 
 	const showCategories = () => {
 		return categories.map(categoryI => {
