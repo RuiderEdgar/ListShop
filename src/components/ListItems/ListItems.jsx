@@ -5,7 +5,7 @@ import trash from '../../assets/icons/basura.png';
 import ItemStyles from './ListItems.module'
 
 
-export const ListItem = ({ item, handleDeleteItem, category }) => {
+export const ListItem = ({ item, handleDeleteItem, itemId }) => {
 	const [isChecked, setChecked] = useState(false);
 
 	return (
@@ -15,7 +15,7 @@ export const ListItem = ({ item, handleDeleteItem, category }) => {
 				<Text>{item}</Text>
 			</View>
 			<View style={ItemStyles.pressableContainer}>
-				<Pressable onPress={() => handleDeleteItem(category, item)}>
+				<Pressable onPress={() => handleDeleteItem(itemId)}>
 					<Image style={ItemStyles.image} source={trash} />
 				</Pressable>
 			</View>

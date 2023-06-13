@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Modal, View, TextInput, Button } from 'react-native';
 import ModalStyles from './Modal.module';
 
-export const CustomModal = ({ visible, onClose, handleAddItem, addCategory, category }) => {
+export const CustomModal = ({ visible, onClose, handleAddItem, addCategory, categoryId }) => {
 	const [inputValue, setInputValue] = useState('');
 
 	const onSubmit = () => {
 		handleAddItem
-		? handleAddItem(category, inputValue)
+		? handleAddItem(categoryId, inputValue)
 		:	addCategory(inputValue);
 	}
 

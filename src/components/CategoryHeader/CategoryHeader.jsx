@@ -18,9 +18,11 @@ export const CategoryHeader = ({ id, category, items, handleAddItem, handleDelet
 	};
 
 	const showItems = () => {
-		return items.map(item => {
-			return <ListItem item={item} key={item} category={category} handleDeleteItem={handleDeleteItem} />;
-		});
+		const filteredItems = items.filter(item => item.idCategory1 === id);
+
+		return filteredItems.map(item => (
+			<ListItem item={item.item} key={item.id} handleDeleteItem={handleDeleteItem} itemId={item.id}/>
+		));
 	};
 
 	return (
@@ -48,7 +50,7 @@ export const CategoryHeader = ({ id, category, items, handleAddItem, handleDelet
 				visible={isModalVisible}
 				onClose={toggleModal}
 				handleAddItem={handleAddItem}
-				category={category}
+				categoryId={id}
 				key={'item'}
 			/>
 		</View>

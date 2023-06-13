@@ -9,15 +9,17 @@ import { categoryService } from './shared/globals/services/db/category.service';
 import { itemService } from './shared/globals/services/db/item.service';
 
 export default function App() {
-	const [categories, setCategories] = useState([])
-	const [change, setChange] = useState(false)
+	const [categories, setCategories] = useState([]);
+	const [items, setItems] = useState([]);
+	const [change, setChange] = useState(false);
 
 	//implementacion database
 	useEffect(() => {
 		//create tables
 		setupDataBase();
-	}, [])
+	}, []);
 
+	//*Category
 	useEffect(() => {
 		// Obtener las categorías iniciales al cargar la aplicación
 		categoryService.getAllCategories(categories => {
@@ -30,32 +32,46 @@ export default function App() {
 		categoryService.watchCategories(categories => {
 			setCategories(categories);
 		});
-	}, [change])
+	}, [change]);
 
+	//*Items
+	useEffect(() => {
+		// Obtener los items iniciales al cargar la aplicación
+		itemService.getAllItems(items => {
+			setItems(items)
+		});
+	}, []);
 
-	//todo
-	// categoryService.getAllCategories(categories => {
-	// 	console.log('Categorías:', categories);
-	// });
-	// console.log("categories: ", categories)
+	useEffect(() => {
+		// Configurar el watcher para actualizar los items cuando haya cambios en la base de datos
+		itemService.watchItems(items => {
+			setItems(items);
+		});
+	}, [change]);
 
-	const addCategory = (inputCategory) => {
-		categoryService.insertCategory(inputCategory)
-		setChange(!change)
-	}
+	//*Category
+	const addCategory = inputCategory => {
+		categoryService.insertCategory(inputCategory);
+		setChange(!change);
+	};
 
 	const deleteCategory = categoryId => {
 		categoryService.deleteCategory(categoryId);
 		setChange(!change);
 	};
 
+	//*Items
 	const handleAddItem = (category, newItem) => {
 		itemService.insertItem(category, newItem);
+		setChange(!change);
 	};
 
-	const handleDeleteItem = (category, deleteItem) => {
-		itemService.deleteItem(category, deleteItem);
+	const handleDeleteItem = (idItem) => {
+		itemService.deleteItem(idItem);
+		setChange(!change);
 	};
+
+	// borre: items = { items };, para visualizarlo con la llave foranea y pasarla como prop a category
 
 	const showCategories = () => {
 		return categories.map(categoryI => {
@@ -63,23 +79,22 @@ export default function App() {
 				<CategoryHeader
 					id={categoryI.id} // Pasar el ID como prop
 					category={categoryI.name}
-					key={categoryI.name} // Usar el ID como clave única
+					key={`${categoryI.id}${categoryI.name}`} // Usar el ID como clave única + el nombre de la categoria
 					handleAddItem={handleAddItem}
 					handleDeleteItem={handleDeleteItem}
 					deleteCategory={deleteCategory}
+					items={items}
 				/>
 			);
 		});
 	};
 
-
-
-  return (
+	return (
 		<SafeAreaProvider>
 			<SafeAreaView style={styles.container}>
 				<StatusBar style="dark" />
 				<ScrollView>
-					<Header addCategory={addCategory}/>
+					<Header addCategory={addCategory} />
 					{categories && showCategories()}
 				</ScrollView>
 			</SafeAreaView>
